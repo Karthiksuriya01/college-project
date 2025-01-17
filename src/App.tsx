@@ -4,6 +4,7 @@ import Homepage from "./pages/Homepage";
 import Profilepage from "./pages/Profilepage";
 import Resourcespage from "./pages/Resourcespage";
 import Searchpage from "./pages/Searchpage";
+import { ThemeProvider } from "@/components/theme-provider"
 const App = () => {
 
   const router = createBrowserRouter(
@@ -13,7 +14,7 @@ const App = () => {
         element: <Applayout />,
         children: [
           {
-            path:'/Homepage',
+            path:'/home',
             element:<Homepage/>
 
           },
@@ -37,9 +38,9 @@ const App = () => {
     ]
   )
   return (
-    <div>
-      <RouterProvider router={router}/>
-    </div>
+  <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    {<RouterProvider router={router}/>}  
+  </ThemeProvider>
   );
 }
 
