@@ -3,7 +3,7 @@ import React from 'react';
 const Resourcespage = () => {
   return (
     <div>
-      <h1>resources page</h1>
+      <h1>resources Page </h1>
     </div>
   );
 }
