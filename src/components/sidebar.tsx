@@ -10,7 +10,7 @@ const SideBar = () => {
   const userName = `${user?.fullName}`
   const userEmail = user?.primaryEmailAddress 
   return (
-    <div className="fixed top-0 left-0 z-40 w-64 h-screen p-6 bg-black">
+    <div className="fixed top-0 left-0 z-40 w-64 h-screen p-6 bg-black border-r">
         <aside className="space-y-9">
             <div className=" flex justify-between text-white text-2xl font-semibold items-center " >
                 <div className="flex gap-3 justify-center">
