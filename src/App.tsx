@@ -5,6 +5,7 @@ import Profilepage from "./pages/Profilepage";
 import Resourcespage from "./pages/Resourcespage";
 import Searchpage from "./pages/Searchpage";
 import { ThemeProvider } from "@/components/theme-provider"
+
 const App = () => {
 
   const router = createBrowserRouter(

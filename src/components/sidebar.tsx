@@ -1,20 +1,48 @@
 import { BookOpen, Home, Search, User } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import { ModeToggle } from "./mode-toggle";
+import { SignedIn, useUser } from "@clerk/clerk-react";
+import { UserButton } from "@clerk/clerk-react";
 
 
 const SideBar = () => {
+
+  const {user} = useUser()
+  const userName = `${user?.fullName}`
+  const userEmail = user?.primaryEmailAddress 
   return (
-    <div className="fixed top-0 left-0 z-40 w-64 h-screen p-5">
-        <aside className="space-y-5">
-            <div className=" flex justify-between text-white text-2xl font-semibold flex items-center " >
-                <div className="flex items-center">
-                    <img src="public\logo.png"  alt="" className="w-10 h-10"/>
+    <div className="fixed top-0 left-0 z-40 w-64 h-screen p-6 bg-black">
+        <aside className="space-y-9">
+            <div className=" flex justify-between text-white text-2xl font-semibold items-center " >
+                <div className="flex gap-3 justify-center">
+                    <div>
+                    <SignedIn>
+                        <UserButton 
+                        appearance={{
+                            elements: {
+                            avatarBox: "w-10 h-10",
+                            },
+                        }}/>
+                    </SignedIn>
+                    </div>
+                    <div className="text-xs flex flex-col">
+                        {
+                            user ? (
+                                <>
+                                
+                                <span className="text-sm capitalize">{userName}</span>
+                                <span className="opacity-50">{userEmail?.emailAddress ?? ''}</span>
+                                </>
+                            ) : (
+                                
+                                <div className="flex items-center text-3xl gap-3">
+                    <img src="public\logo.png"  alt="" className="w-8 h-8"/>
                     CREMS 
                 </div>
-                <div>
-                    <ModeToggle/>
+                            )
+                        }
+                    </div>
                 </div>
+                
             </div>
             <nav>
                 <ul className="space-y-4 align-middle">
