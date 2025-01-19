@@ -1,7 +1,19 @@
+import StatusCards from "@/components/status-cards";
+import { useUser } from "@clerk/clerk-react";
+
 const Homepage = () => {
+  const {user} = useUser()
+
   return (
     <div>
-      <h1>home page</h1>
+      <div>
+        <span className="capitalize text-3xl font-bold">👋Welcome Back, {
+        `${user?.firstName}`
+        }</span>
+      </div>
+      <div>
+        <StatusCards/>
+      </div>
     </div>
   );
 }
