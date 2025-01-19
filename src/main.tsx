@@ -6,7 +6,7 @@ import { ClerkProvider } from '@clerk/clerk-react'
 import { dark } from '@clerk/themes'
 
 // Import your Publishable Key
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+const PUBLISHABLE_KEY = "pk_test_c21pbGluZy1lZ3JldC0zMi5jbGVyay5hY2NvdW50cy5kZXYk"
 
 if (!PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key")
