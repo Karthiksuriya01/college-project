@@ -35,7 +35,7 @@ const SideBar = () => {
                             ) : (
                                 
                                 <div className="flex items-center text-3xl gap-3">
-                    <img src="public\logo.png"  alt="" className="w-8 h-8"/>
+                    <img src="/logo.png"  alt="" className="w-8 h-8"/>
                     CREMS 
                 </div>
                             )

@@ -1,12 +1,12 @@
 import supabaseClient from "@/utils/supabase"
 
-export const getEvent = async (token) =>
+export async function getEvent(token:string) 
     {
         const supabase = await supabaseClient(token)
         
                 
         const { data , error } = await supabase
-        .from('event')
+        .from('events')
         .select('*')
         
 
