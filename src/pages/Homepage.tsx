@@ -1,3 +1,4 @@
+import EventListing from "@/components/event-listing";
 import StatusCards from "@/components/status-cards";
 import { useUser } from "@clerk/clerk-react";
 
@@ -13,6 +14,7 @@ const Homepage = () => {
       </div>
       <div>
         <StatusCards/>
+        <EventListing/>
       </div>
     </div>
   );
