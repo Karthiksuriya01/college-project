@@ -1,18 +1,16 @@
-import supabaseClient from "@/utils/supabase"
+import supabaseClient from "@/utils/supabase";
 
-export async function getEvent(token:string) 
-    {
-        const supabase = await supabaseClient(token)
-        
-                
-        const { data , error } = await supabase
+
+export async function getEvent(token:string) {
+    const supabase = await supabaseClient(token);
+    
+    const { data, error } = await supabase
         .from('events')
-        .select('*')
-        
+        .select('*');
 
-        if(error)
-        {
-            console.error(error)
-        }
-        return data
-    } 
+    if (error) {
+        console.error(error);
+        return []; 
+    }
+    return data;
+}
