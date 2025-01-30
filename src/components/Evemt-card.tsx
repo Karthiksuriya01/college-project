@@ -24,7 +24,7 @@ const EventCard = ({
         <CardTitle className="flex justify-between font-bold capitalize">
           {event.title}
         </CardTitle>
-        <CardTitle className={event.status == "pending" ? "text-xs bg-red-500 w-fit px-2 py-1 rounded-xl capitalize" : "text-xs bg-green-600 w-fit px-2 py-1 rounded-xl capitalize"}>
+        <CardTitle className={event.status == "pending" ? "text-xs bg-red-400 w-fit px-2 py-1 rounded-xl capitalize" : "text-xs bg-green-400 w-fit px-2 py-1 rounded-xl capitalize"}>
             {event.status}
         </CardTitle>
 
