@@ -1,11 +1,12 @@
-import { completedStatus } from "@/api/apicompleted";
+import {  CheckCompletionStatus, markEventAsCompleted } from "@/api/apicompleted";
 import { getEventById } from "@/api/apiEvents";
 import { Button } from "@/components/ui/button";
 
 import useFetch from "@/hook/useFetch";
+import { toast } from "@/hooks/use-toast";
 import { useAuth, useUser } from "@clerk/clerk-react";
-import { CircleCheckBig, Link2, Notebook, Timer } from "lucide-react";
-import { useEffect } from "react";
+import { CircleCheckBig, Link2, Timer } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import {  useParams } from "react-router-dom";
 
@@ -15,6 +16,7 @@ const EventPage = (
 
 ) => {
 
+  const [isCompleted, setIsCompleted] = useState(false);
   const {isLoaded,user} = useUser()
   const {userId} = useAuth()
   const { id } = useParams<{ id: string }>();
@@ -23,11 +25,27 @@ const EventPage = (
     event_id: id
   })
   //completed button
-  const { data:completed, loading:compl_loading, error:compl_error, fn:compl_func } = useFetch(completedStatus, {
+  const { fn:compl_func } = useFetch(markEventAsCompleted, {
     user_id: userId,
     event_id: id
   })
-  console.log(userId)
+  //completetion status
+  const { data:stat_data,fn:stat_func } = useFetch(CheckCompletionStatus, {
+    user_id: userId,
+    event_id: id
+  })
+  useEffect(() => {
+  
+    if(isLoaded) stat_func();
+  [isLoaded,stat_func]})
+  useEffect(() => {
+    if (stat_data && stat_data.length > 0) {
+      setIsCompleted(true);
+    } else {
+      setIsCompleted(false);
+    }
+  }, [stat_data]);
+  
   useEffect(() => {
   
     if(isLoaded) 
@@ -35,13 +53,25 @@ const EventPage = (
         event_funct();
       }
   [isLoaded]})
-  useEffect(() => {
-  
-    if(isLoaded) 
-      {
-        compl_func();
-      }
-  [isLoaded]})
+
+  const handleComplete = async () => {
+    try
+    {
+      await compl_func()
+      toast({
+        description: "Your message has been sent.",
+      })
+      setIsCompleted(true)
+    }catch(e)
+    {
+      console.log(e)
+      toast({
+        description: "Your message not has been sent.",
+      })
+    }
+    
+  }
+ 
   
   if(!isLoaded) return <h1>Loading...</h1>
   if (error) {
@@ -83,9 +113,15 @@ const EventPage = (
       <hr />
       <div className="my-5 space-y-8">
         <p>{event?.description}</p>
-        <Button variant="secondary" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-10 px-4 py-2 flex-1 bg-[#00FF38] text-black hover:bg-[#00FF38]/90">
-           Completed
-          </Button>
+        {
+          user?.unsafeMetadata.role != 'admin' &&  <Button variant="secondary" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-10 px-4 py-2 flex-1 bg-[#00FF38] text-black hover:bg-[#00FF38]/90"
+          onClick={handleComplete}
+          disabled={isCompleted} 
+          >
+             {isCompleted ? "You have completed this" : "Complete"}
+            </Button>
+        }
+       
       </div>
      
      
