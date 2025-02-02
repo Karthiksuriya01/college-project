@@ -10,7 +10,7 @@ import useFetch from "@/hook/useFetch";
 const Homepage = () => {
   const {user,isLoaded} = useUser()
 
-  const {data:event_data,loading:event_loading,error:event_error,fn:eventFn,} = useFetch(getEvent)
+  const {data:event_data,loading:event_loading,error,fn:eventFn,} = useFetch(getEvent)
 
   useEffect(() => {
     eventFn();
@@ -19,7 +19,10 @@ const Homepage = () => {
   if (!isLoaded) {
     return <h1>Loading....</h1>;
   }
-  
+  if(error)
+  {
+    console.log(error)
+  }
   return (
     <div>
       <div>

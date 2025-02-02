@@ -1,4 +1,4 @@
-import {  CheckCompletionStatus, markEventAsCompleted } from "@/api/apicompleted";
+import {  CheckCompletionStatus, markEventAsCompleted,getEventCompletionCount } from "@/api/apicompleted";
 import { getEventById } from "@/api/apiEvents";
 import { Button } from "@/components/ui/button";
 
@@ -17,6 +17,7 @@ const EventPage = (
 ) => {
 
   const [isCompleted, setIsCompleted] = useState(false);
+  const [completedCount,setCompletedCount] = useState(0)
   const {isLoaded,user} = useUser()
   const {userId} = useAuth()
   const { id } = useParams<{ id: string }>();
@@ -34,17 +35,35 @@ const EventPage = (
     user_id: userId,
     event_id: id
   })
+  //completed count
+  const { data:compl_count,fn:compl_count_func } = useFetch(getEventCompletionCount, {
+    event_id: id
+  })
+  useEffect(() => 
+  {
+    if(isLoaded) compl_count_func();
+  },[isLoaded,compl_count_func])
+
+   useEffect(() => {
+    if (compl_count) {
+      setCompletedCount(compl_count?.length);
+    }
+   },[compl_count])
+
+
   useEffect(() => {
   
     if(isLoaded) stat_func();
   [isLoaded,stat_func]})
+
+
   useEffect(() => {
     if (stat_data && stat_data.length > 0) {
       setIsCompleted(true);
     } else {
       setIsCompleted(false);
     }
-  }, [stat_data]);
+  }, [stat_data])
   
   useEffect(() => {
   
@@ -106,7 +125,7 @@ const EventPage = (
       </div>
       <div className="flex flex-row gap-8 my-5">
           <p className="flex flex-row items-center gap-2">Completed : </p>
-          <p>20/62</p>
+          <p>{completedCount}/62</p>
       </div>
      
       </div>

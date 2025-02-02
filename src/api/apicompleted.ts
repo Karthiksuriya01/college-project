@@ -38,7 +38,37 @@ export async function CheckCompletionStatus(
     console.log(error);
     return [];
   }
-  console.log(data)
+  // console.log(data)
   return data;
 
+}
+
+export async function getEventCompletionCount(token: string, {event_id}) {
+  const supabase = await supabaseClient(token);
+
+  const { data, error } = await supabase
+    .from('completed')
+    .select('*',{count:'exact'})
+    .eq('event_id', event_id)
+
+  if (error) {
+    console.log(error);
+    return [];
+  }
+  return data;
+}
+
+export async function getEventCompletionCount(token: string, {event_id}) {
+  const supabase = await supabaseClient(token);
+
+  const { data, error } = await supabase
+    .from('completed')
+    .select('*',{count:'exact'})
+    .eq('event_id', event_id)
+
+  if (error) {
+    console.log(error);
+    return [];
+  }
+  return data;
 }
