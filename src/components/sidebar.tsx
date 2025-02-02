@@ -1,14 +1,18 @@
-import { BookOpen, Home, Search, User } from "lucide-react";
+import { BookOpen, Home, Plus, Search, User } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { SignedIn, useUser } from "@clerk/clerk-react";
 import { UserButton } from "@clerk/clerk-react";
+import { SkeletonDemo } from "./skelton";
 
 
 const SideBar = () => {
 
-  const {user} = useUser()
+  const {user,isLoaded} = useUser()
   const userName = `${user?.fullName}`
   const userEmail = user?.primaryEmailAddress 
+  if (!isLoaded) {
+    return <SkeletonDemo />
+  }
   return (
     <div className="fixed top-0 left-0 z-40 w-64 h-screen p-6 bg-black border-r">
         <aside className="space-y-9">
@@ -27,17 +31,25 @@ const SideBar = () => {
                     <div className="text-xs flex flex-col">
                         {
                             user ? (
-                                <>
+
+                                !isLoaded ? <SkeletonDemo/> : (
+
+                                    <>
                                 
                                 <span className="text-sm capitalize">{userName}</span>
                                 <span className="opacity-50">{userEmail?.emailAddress ?? ''}</span>
                                 </>
+                                )
                             ) : (
+
                                 
-                                <div className="flex items-center text-3xl gap-3">
+                                !isLoaded ? <SkeletonDemo/> : ( 
+
+                                    <div className="flex items-center text-3xl gap-3">
                     <img src="/logo.png"  alt="" className="w-8 h-8"/>
                     CREMS 
                 </div>
+                                )
                             )
                         }
                     </div>
@@ -89,6 +101,17 @@ const SideBar = () => {
                                 }}
                         >
                            <User size={20}/> Profile
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink
+                            to={'/createvent'}
+                            className={
+                                ({ isActive }) => {
+                                return isActive ? "flex gap-3 text-20 items-center p-3 rounded-lg bg-[#00FF38] text-black transition-colors" : "flex rounded-lg gap-3 p-3 text-20 items-center hover:bg-gray-600 text-none text-white";
+                                }}
+                        >
+                          <Plus size={20}/>  Create Event
                         </NavLink>
                     </li>
                 </ul>

@@ -111,7 +111,7 @@ const Resourcespage = () => {
     <Dialog>
       <DialogTrigger asChild>
       <Card className="bg-black rounded-lg border bg-card text-card-foreground shadow-sm aspect-square flex items-center justify-center text-xl font-medium hover:bg-accent cursor-pointer transition-colors">
-      <CardHeader className="bg-black">
+      <CardHeader>
         <CardTitle>Compiler Design</CardTitle>
         <CardDescription>Click to Open</CardDescription>
       </CardHeader>

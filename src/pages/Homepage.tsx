@@ -19,6 +19,7 @@ const Homepage = () => {
   if (!isLoaded) {
     return <h1>Loading....</h1>;
   }
+  
   return (
     <div>
       <div>
@@ -29,6 +30,7 @@ const Homepage = () => {
       <StatusCards/>
       <h1>Today</h1>
 
+      
       
 
       {event_loading == false && (

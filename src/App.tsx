@@ -5,6 +5,8 @@ import Profilepage from "./pages/Profilepage";
 import Resourcespage from "./pages/Resourcespage";
 import Searchpage from "./pages/Searchpage";
 import { ThemeProvider } from "@/components/theme-provider"
+import CreateEventpage from "./pages/CreateEventpage";
+import EventPage from "./pages/EventPage";
 
 const App = () => {
 
@@ -30,6 +32,14 @@ const App = () => {
           {
             path:'/search',
             element:<Searchpage/>
+          },
+          {
+            path:'/event/:id',
+            element:<EventPage />
+          },
+          {
+            path:'/createvent',
+            element:<CreateEventpage/>
           },
         ]
 
