@@ -58,13 +58,13 @@ export async function getEventCompletionCount(token: string, {event_id}) {
   return data;
 }
 
-export async function getEventCompletionCount(token: string, {event_id}) {
+export async function getUserCompletedEventCount(token: string, {user_id}) {
   const supabase = await supabaseClient(token);
 
   const { data, error } = await supabase
     .from('completed')
     .select('*',{count:'exact'})
-    .eq('event_id', event_id)
+    .eq('user_id', user_id)
 
   if (error) {
     console.log(error);
