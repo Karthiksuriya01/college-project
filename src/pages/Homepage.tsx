@@ -31,13 +31,13 @@ const Homepage = () => {
         }</span>
       </div>
       <StatusCards/>
-      <h1>Today</h1>
+      <h4>Today</h4>
 
       
       
 
       {event_loading == false && (
-        <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-2">
           {event_data?.length? (
             event_data.map((event:any) => 
             {

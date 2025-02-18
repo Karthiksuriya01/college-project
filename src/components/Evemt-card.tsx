@@ -17,43 +17,37 @@ import { LinkIcon, Timer, TimerIcon } from "lucide-react";
 const EventCard = ({
   event
 }) => {
-
-  // const {user} = useUser()
   const timestamp = event?.created_at
-
   const date = new Date(timestamp)
 
   return (
-    <Card className="flex flex-col bg-black">
-      <CardHeader className="flex flex-row justify-between">
-        <CardTitle className="flex justify-between font-bold capitalize">
+    <Card className="flex flex-col bg-black max-w-sm">
+      <CardHeader className="flex flex-row justify-between py-3">
+        <CardTitle className="flex justify-between font-bold capitalize text-pretty">
           {event.title}
         </CardTitle>
-        <CardTitle className={event.status == "pending" ? "text-xs bg-red-400 w-fit px-2 py-1 rounded-xl capitalize" : "text-xs bg-green-400 w-fit px-2 py-1 rounded-xl capitalize"}>
+        <CardTitle className={event.status == "pending" ? "text-xs bg-red-400 w-fit px-1.5 py-0.5 rounded-xl capitalize" : "text-xs bg-green-400 w-fit px-1.5 py-0.5 rounded-xl capitalize"}>
             {event.status}
         </CardTitle>
-
       </CardHeader>
-      <CardContent className="flex flex-col gap-4 flex-1">
-        <hr />
-        {event.description.includes(".") 
-          ? event.description.substring(0, event.description.indexOf(".")) 
-          : event.description} 
-        
+      <CardContent className="flex flex-col gap-2 py-2">
+        <hr className="mb-1" />
+        <p className="text-sm">
+          {event.description.includes(".") 
+            ? event.description.substring(0, event.description.indexOf(".")) 
+            : event.description}
+        </p>
       </CardContent>
-      <CardContent className="flex flex-col gap-2">
-        <div className="flex flex-row items-center gap-2">
-
-       <LinkIcon size={15} /> {event.link}
+      <CardContent className="flex flex-col gap-1.5 py-2">
+        <div className="flex flex-row items-center gap-1.5 text-sm">
+          <LinkIcon size={14} /> {event.link}
         </div>
-        <div className="flex flex-row items-center gap-2"> 
-
-       <Timer size={15}/> {date.toDateString()}
+        <div className="flex flex-row items-center gap-1.5 text-sm">
+          <Timer size={14}/> {date.toDateString()}
         </div>
-        
       </CardContent>
-      <CardFooter className="flex gap-2">
-      <AddToCalendarButton
+      <CardFooter className="flex gap-2 py-3">
+        <AddToCalendarButton
           name={event.title}
           options={['Google']}
           location="World Wide Web"
@@ -62,11 +56,11 @@ const EventCard = ({
           startTime="10:15"
           endTime="23:30"
           timeZone="America/Los_Angeles"
-        ></AddToCalendarButton>
-          <Link to={`/event/${event.id}`}>
-        <Button variant="secondary"  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 flex-1">
-          View Details
-        </Button>
+        />
+        <Link to={`/event/${event.id}`}>
+          <Button variant="secondary" className="h-8 p-6 text-sm">
+            View Details
+          </Button>
         </Link>
       </CardFooter>
     </Card>
