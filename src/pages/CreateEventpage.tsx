@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { date, z } from 'zod';
+import { z } from 'zod';
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -21,7 +21,11 @@ import { useNavigate } from 'react-router-dom';
 const formschema = z.object({
   title: z.string().min(1, { message: 'Title is required' }),
   description: z.string().min(1, { message: 'Description is required' }),
-  end_date: z.string(),
+  end_date: z.string()
+    .min(1, { message: 'End date is required' })
+    .refine((date) => new Date(date) >= new Date(new Date().setHours(0, 0, 0, 0)), {
+      message: "End date must be today or in the future"
+    }),
   link: z.string().min(1, { message: 'Link is required' }),
   status: z.enum(['pending', 'completed'])
 });
@@ -32,18 +36,25 @@ const CreateEventpage = () => {
 
   const { data: add_event_data, loading: add_event_loading, error, fn: add_event_func } = useFetch(addEvent);
 
-  const onsubmit = (data: z.infer<typeof formschema>) => {
-    const eventData = {
-      title: data.title,
-      description: data.description,
-      end_date: new Date(data.end_date).toISOString(), // Convert to ISO string
-      link: data.link,
-      status: data.status,
-      created_by: userId
-    };
-    
-    console.log('Form data:', eventData);
-    add_event_func(eventData);
+  const onsubmit = async (data: z.infer<typeof formschema>) => {
+    try {
+      const eventData = {
+        title: data.title,
+        description: data.description,
+        end_date: new Date(data.end_date).toISOString().split('T')[0], // Format as YYYY-MM-DD
+        link: data.link,
+        status: 'pending', // Default to pending
+        created_by: userId
+      };
+      
+      console.log('Form data:', eventData);
+      const result = await add_event_func(eventData);
+      if (result) {
+        navigate('/home');
+      }
+    } catch (err) {
+      console.error('Error submitting form:', err);
+    }
   };
 
   useEffect(() => {
@@ -58,17 +69,18 @@ const CreateEventpage = () => {
     defaultValues: {
       title: '',
       description: '',
+      end_date: new Date().toISOString().split('T')[0], // Today's date as default
       link: '',
       status: 'pending',
-      end_date: ''
     },
     resolver: zodResolver(formschema)
   });
 
   return (
-    <div>
+    <div className="max-w-2xl mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-6">Create New Event</h1>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onsubmit)}>
+        <form onSubmit={form.handleSubmit(onsubmit)} className="space-y-6">
           <FormField
             control={form.control}
             name='title'
@@ -104,6 +116,7 @@ const CreateEventpage = () => {
                 <FormControl>
                   <Input
                     type="date"
+                    min={new Date().toISOString().split('T')[0]} // Can't select past dates
                     {...field}
                   />
                 </FormControl>
@@ -124,10 +137,20 @@ const CreateEventpage = () => {
               </FormItem>
             )}
           />
-          <Button type='submit'>Submit</Button>
+          {error instanceof Error && (
+            <div className="text-red-500 text-sm">
+              {error.message || 'An error occurred while creating the event'}
+            </div>
+          )}
+          <Button 
+            type="submit" 
+            disabled={add_event_loading}
+            className="w-full"
+          >
+            {add_event_loading ? 'Creating...' : 'Create Event'}
+          </Button>
         </form>
       </Form>
-      <h1>Event page created</h1>
     </div>
   );
 };

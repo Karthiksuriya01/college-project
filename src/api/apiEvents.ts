@@ -14,23 +14,31 @@ export async function getEvent(token: string) {
     return data;
 }
 
-export async function addEvent(token: string, _:any, eventdata: any) {
-    const supabase = await supabaseClient(token);
-    
-    try {
-        const { data, error } = await supabase
-            .from('events')
-            .insert([{
-                ...eventdata,
-            }])
-            .select();
+interface EventData {
+  title: string;
+  description: string;
+  end_date: string; // Format: YYYY-MM-DD
+  link: string;
+  status: 'pending' | 'completed';
+  created_by: string;
+}
 
-        if (error) throw error;
-        return data;
-    } catch (error) {
-        console.error('Error adding event:', error);
-        return [];
-    }
+export async function addEvent(token: string, _:string, eventdata: EventData) {
+  const supabase = await supabaseClient(token);
+  console.log(eventdata)
+  
+  try {
+    const { data, error } = await supabase
+      .from('events')
+      .insert([eventdata])
+      .select();
+
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error('Error adding event:', error);
+    throw error; // Re-throw to handle in component
+  }
 }
 
 export async function getEventById(token: string, { event_id }: { event_id: string }) {
