@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { addEvent } from '@/api/apiEvents';
 import useFetch from '@/hook/useFetch';
-import { useAuth } from '@clerk/clerk-react';
+import { useAuth, useUser } from '@clerk/clerk-react';
 import { Textarea } from '@/components/ui/textarea';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -31,7 +31,7 @@ const formschema = z.object({
 });
 
 const CreateEventpage = () => {
-  const { userId } = useAuth();
+  const {user} = useUser()
   const navigate = useNavigate();
 
   const { data: add_event_data, loading: add_event_loading, error, fn: add_event_func } = useFetch(addEvent);
@@ -44,7 +44,7 @@ const CreateEventpage = () => {
         end_date: new Date(data.end_date).toISOString().split('T')[0], // Format as YYYY-MM-DD
         link: data.link,
         status: 'pending', // Default to pending
-        created_by: userId
+        created_by:  `${user?.fullName}`
       };
       
       console.log('Form data:', eventData);

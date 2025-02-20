@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
@@ -11,7 +10,7 @@ import {
   CardTitle,
 } from "./ui/card";
 
-import { LinkIcon, Timer, TimerIcon } from "lucide-react";
+import { LinkIcon, Timer} from "lucide-react";
 
 
 const EventCard = ({
@@ -21,7 +20,7 @@ const EventCard = ({
   const date = new Date(timestamp)
 
   return (
-    <Card className="flex flex-col bg-black max-w-sm">
+    <Card className="flex flex-col bg-black max-w-lg h-max">
       <CardHeader className="flex flex-row justify-between py-3">
         <CardTitle className="flex justify-between font-bold capitalize text-pretty">
           {event.title}
@@ -37,6 +36,7 @@ const EventCard = ({
             ? event.description.substring(0, event.description.indexOf(".")) 
             : event.description}
         </p>
+        <p>{event.created_by}</p>
       </CardContent>
       <CardContent className="flex flex-col gap-1.5 py-2">
         <div className="flex flex-row items-center gap-1.5 text-sm">
@@ -45,6 +45,7 @@ const EventCard = ({
         <div className="flex flex-row items-center gap-1.5 text-sm">
           <Timer size={14}/> {date.toDateString()}
         </div>
+        
       </CardContent>
       <CardFooter className="flex gap-2 py-3">
         <AddToCalendarButton
