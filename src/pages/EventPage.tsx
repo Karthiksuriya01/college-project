@@ -145,7 +145,7 @@ const EventPage = (
       </div>
       <div className="flex flex-row gap-8 my-5">
           <p className="flex flex-row items-center gap-2"> <CircleCheckBig size={20}/> Status : </p>
-          <p className={event?.status == "pending" ? "text-xs bg-red-400 w-fit px-2 py-1 rounded-xl capitalize" : "text-xs bg-green-500 w-fit px-2 py-1 rounded-xl capitalize"}>
+          <p className={event?.status == "pending" ? "text-xs bg-red-800 w-fit px-2 py-1 rounded-xl capitalize" : "text-xs bg-green-800 w-fit px-2 py-1 rounded-xl capitalize"}>
             {event?.status}
         </p>
       </div>
@@ -172,15 +172,17 @@ const EventPage = (
         }
        
       </div>
-      <div className="my-5 space-y-8">
+      {
+        user?.unsafeMetadata.role == 'admin' &&
+      <div>
+      
         {
-          user?.unsafeMetadata.role == 'admin' &&  user.id == event?.created_by ?
+          user?.unsafeMetadata.role != 'user' &&  user.id == event?.created_by ?
           <Button variant={"destructive"} onClick={handleDelete}>Delete the Event</Button> : <Button variant={"destructive"} disabled>You dont have access to delete this Event</Button>
         }
-       
-      </div>
      
-     
+        </div>
+}
     </div>
   );
 }
