@@ -58,7 +58,7 @@ const CreateEventpage = () => {
       end_date: new Date().toISOString().split('T')[0], // Today's date as default
       link: '',
       status: 'completed',
-      created_by:`${user?.fullName}`
+      created_by:user?.id
     },
     resolver: zodResolver(formschema)
   });

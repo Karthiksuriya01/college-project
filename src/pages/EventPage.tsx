@@ -1,5 +1,5 @@
 import {  CheckCompletionStatus, markEventAsCompleted,getEventCompletionCount } from "@/api/apicompleted";
-import { getEventById } from "@/api/apiEvents";
+import { deleteEvent, getEventById } from "@/api/apiEvents";
 import { Button } from "@/components/ui/button";
 
 import useFetch from "@/hook/useFetch";
@@ -8,7 +8,7 @@ import { useAuth, useUser } from "@clerk/clerk-react";
 import { CircleCheckBig, Link2, Timer } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import {  useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 
 
 
@@ -21,6 +21,7 @@ const EventPage = (
   const {isLoaded,user} = useUser()
   const {userId} = useAuth()
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate()
   //event show based on id
   const { data:event, loading, error, fn:event_funct } = useFetch(getEventById, {
     event_id: id
@@ -39,6 +40,14 @@ const EventPage = (
   const { data:compl_count,fn:compl_count_func } = useFetch(getEventCompletionCount, {
     event_id: id
   })
+
+   //delete Event
+   const { fn:del_func } = useFetch(deleteEvent, {
+    event_id: id
+  })
+
+
+
   useEffect(() => 
   {
     if(isLoaded) compl_count_func();
@@ -54,7 +63,7 @@ const EventPage = (
   useEffect(() => {
   
     if(isLoaded) stat_func();
-  [isLoaded,stat_func]})
+},[isLoaded,stat_func])
 
 
   useEffect(() => {
@@ -71,7 +80,28 @@ const EventPage = (
       {
         event_funct();
       }
-  [isLoaded]})
+    },[isLoaded])
+
+
+  const handleDelete = async () =>
+  {
+    try
+    {
+      await del_func()
+      toast({
+        description: "Event is Delted",
+      })
+      navigate('/home')
+    }catch(e)
+    {
+      console.log(e)
+      toast({
+        variant : "destructive",
+        description: "Event is not delted",
+      })
+    }
+  }
+
 
   const handleComplete = async () => {
     try
@@ -139,6 +169,13 @@ const EventPage = (
           >
              {isCompleted ? "You have completed this" : "Complete"}
             </Button>
+        }
+       
+      </div>
+      <div className="my-5 space-y-8">
+        {
+          user?.unsafeMetadata.role == 'admin' &&  user.id == event?.created_by ?
+          <Button variant={"destructive"} onClick={handleDelete}>Delete the Event</Button> : <Button variant={"destructive"} disabled>You dont have access to delete this Event</Button>
         }
        
       </div>

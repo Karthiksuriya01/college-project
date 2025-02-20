@@ -37,8 +37,24 @@ export async function addEvent(token: string, _:string, eventdata: EventData) {
     return data;
   } catch (error) {
     console.error('Error adding event:', error);
-    throw error; // Re-throw to handle in component
+    throw error; 
   }
+}
+
+export async function deleteEvent(token: string, {event_id}) {
+  const supabase = await supabaseClient(token);
+
+  const { data, error } = await supabase
+    .from('events')
+    .delete()
+    .eq('id', event_id)
+    .select()
+
+  if (error) {
+    console.log(error);
+    return [];
+  }
+  return data;
 }
 
 export async function getEventById(token: string, { event_id }: { event_id: string }) {
