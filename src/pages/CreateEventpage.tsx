@@ -27,7 +27,8 @@ const formschema = z.object({
       message: "End date must be today or in the future"
     }),
   link: z.string().min(1, { message: 'Link is required' }),
-  status: z.enum(['pending', 'completed'])
+  status: z.enum(['pending', 'completed']),
+  created_by: z.string()
 });
 
 const CreateEventpage = () => {
@@ -37,24 +38,9 @@ const CreateEventpage = () => {
   const { data: add_event_data, loading: add_event_loading, error, fn: add_event_func } = useFetch(addEvent);
 
   const onsubmit = async (data: z.infer<typeof formschema>) => {
-    try {
-      const eventData = {
-        title: data.title,
-        description: data.description,
-        end_date: new Date(data.end_date).toISOString().split('T')[0], // Format as YYYY-MM-DD
-        link: data.link,
-        status: 'pending', // Default to pending
-        created_by:  `${user?.fullName}`
-      };
-      
-      console.log('Form data:', eventData);
-      const result = await add_event_func(eventData);
-      if (result) {
-        navigate('/home');
-      }
-    } catch (err) {
-      console.error('Error submitting form:', err);
-    }
+    
+      await add_event_func(data);
+
   };
 
   useEffect(() => {
@@ -71,7 +57,8 @@ const CreateEventpage = () => {
       description: '',
       end_date: new Date().toISOString().split('T')[0], // Today's date as default
       link: '',
-      status: 'pending',
+      status: 'completed',
+      created_by:`${user?.fullName}`
     },
     resolver: zodResolver(formschema)
   });

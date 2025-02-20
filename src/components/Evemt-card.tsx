@@ -11,6 +11,7 @@ import {
 } from "./ui/card";
 
 import { LinkIcon, Timer} from "lucide-react";
+import { Progress } from "./ui/progress";
 
 
 const EventCard = ({
@@ -45,9 +46,13 @@ const EventCard = ({
         <div className="flex flex-row items-center gap-1.5 text-sm">
           <Timer size={14}/> {date.toDateString()}
         </div>
+        <div className="flex flex-row mt-3 items-center gap-1.5 text-sm">
+          <Progress value={30}/>
+        </div>
         
       </CardContent>
       <CardFooter className="flex gap-2 py-3">
+      
         <AddToCalendarButton
           name={event.title}
           options={['Google']}
@@ -57,6 +62,7 @@ const EventCard = ({
           startTime="10:15"
           endTime="23:30"
           timeZone="America/Los_Angeles"
+          
         />
         <Link to={`/event/${event.id}`}>
           <Button variant="secondary" className="h-8 p-6 text-sm">
